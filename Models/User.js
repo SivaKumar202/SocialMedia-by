@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   password: {
-    type: password,
+    type: String,
     required: true,
   },
   profilePicture: {
@@ -26,13 +26,13 @@ const userSchema = new mongoose.Schema({
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "post" }],
   createdAt: {
-    type: Data,
+    type: Date,
     default: Date.now,
   },
   updatedAt: {
-    type: Data,
+    type: Date,
     default: Date.now,
   },
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
