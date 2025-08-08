@@ -1,4 +1,3 @@
-const { Profiler } = require("react");
 const User = require("../Models/User");
 const bcrypt = require("bcrypt");
 const sayhello = (req, res) => {
@@ -6,7 +5,9 @@ const sayhello = (req, res) => {
   return res.status(200);
 };
 
-const registerUser = async (req, res) => {
+  const registerUser = async (req, res) => {
+  // res.send("register route");
+  // return res.status(200)
   const { username, email, password } = req.body;
 
   try {
@@ -37,7 +38,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-const loginUser = async (res,req)=>{
+const loginUser = async (req,res)=>{
   try {
     const{email, password} = req.body;
     const salt = await bcrypt.genSalt(10);
@@ -64,6 +65,29 @@ const loginUser = async (res,req)=>{
     
   }
 
+}
+
+const updateUser = async (req,res)=>{
+  const {id} = req.params;
+  const {username, email, password, profilePicture} = req.body;
+  try {
+    const user = await User.findById(id);
+    if(!user){
+      return res.status(404).json({message:"user not found"})
+    }
+    if(username && username !== user.username){
+      const existingUserName = await user.findOne({username})
+    }
+    if(existingUser){
+      return res.status(400).json({message:`username already taken`})
+    }
+    if(email && email !== user.email){
+      const existingEmail = await User.findOne({email})
+    }
+    
+  } catch (error) {
+    
+  }
 }
 
 module.exports = { sayhello, registerUser, loginUser };

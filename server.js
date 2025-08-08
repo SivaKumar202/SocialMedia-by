@@ -5,13 +5,14 @@ const app = express();
 const userroute = require('./Routes/userRoute');
 
 const http = require('http').Server(app)
+app.use(express.json())
 connectDB();
 
-app.use('/api/hello',userroute)
+app.use('/api/userrouter',userroute)
 
 
 
 const port = 5000;
 http.listen(port,()=>{
-    console.log("App is Running")
+    console.log(`Server is Running on  :${port}`)
 })
