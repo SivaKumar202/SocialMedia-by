@@ -83,11 +83,24 @@ const updateUser = async (req,res)=>{
     }
     if(email && email !== user.email){
       const existingEmail = await User.findOne({email})
+      if(existingEmail){
+        return res.status(400).json({message:`email is already taken`})
+      }
     }
+    if(username) user.username = username;
+    if(email) user.email = email;
+    if(password){
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password,salt);
+    }
+    if(profilePicture) user.profilePicture = profilePicture
+    user.updatedAt = Date.now();
+    user.save();
+    res.status(200).json({message : "Profile updated"})
     
   } catch (error) {
-    
+    return res.status(500).json({message:`something went wrong`})
   }
 }
 
-module.exports = { sayhello, registerUser, loginUser };
+module.exports = { sayhello, registerUser, loginUser, updateUser};
