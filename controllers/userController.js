@@ -103,4 +103,28 @@ const updateUser = async (req,res)=>{
   }
 }
 
-module.exports = { sayhello, registerUser, loginUser, updateUser};
+const getUserProfile = async (req,res)=>{
+  try{
+    const user = await User.findById(req.params.id);
+    if(user){
+      res.status(200).json({
+        _id:user._id,
+        username:user.username,
+        email:user.email,
+        bio:user.bio,
+        profilePicture:user.profilePicture
+      })
+    }
+    else{
+     return res.status(404).json({message : "User not found"})
+
+    }
+
+  }
+  catch(error){
+    res.status(500).json({message : "Something went wrong"})
+
+  }
+}
+
+module.exports = { sayhello, registerUser, loginUser, updateUser, getUserProfile };
