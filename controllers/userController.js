@@ -127,4 +127,23 @@ const getUserProfile = async (req,res)=>{
   }
 }
 
-module.exports = { sayhello, registerUser, loginUser, updateUser, getUserProfile };
+const searchUser =async (req,res)=>{
+  const {query,id} = req.query;
+  try{
+    const users = await User.find({
+      username:{$regex:query,$option:'i'}
+    }).select('username _id profilePicture')
+    const filteredUser = users.filter(u => u._id.tostring() !== id)
+    .map(u =>({
+      id : u._id.tpString(),
+      username:u.username,
+      profilePicture:u.profilePicture
+    }));
+    res.status(200).json(filteredUser)
+  }
+  catch(error){
+    return res.status(500).json({message:`something went wrong`})
+  }
+}
+
+module.exports = { sayhello, registerUser, loginUser, updateUser, getUserProfile, searchUser };
